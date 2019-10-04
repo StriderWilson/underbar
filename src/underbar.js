@@ -85,12 +85,10 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     var newArr = [];
-    var x = 0
-    _.each(collection, function() {
-      if (test(collection[x])) {
-        newArr.push(collection[x]);
+    _.each(collection, function(item) {
+      if (test(item)) {
+        newArr.push(item);
       }
-      x++
     });
     return newArr;
   };
@@ -100,14 +98,13 @@
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
     var newArr = [];
-    var x = 0;
-    _.each(collection, function() {
-      if (!test(collection[x])) {
-        newArr.push(collection[x]);
+
+    _.each(collection, function(item) {
+      if (!test(item)) {
+        newArr.push(item);
       }
-      x++
     });
-    return newArr
+    return newArr;
   };
 
   // Produce a duplicate-free version of the array.
@@ -115,28 +112,23 @@
     var itArr = [];
     var newArr = [];
     var testArr = [];
-    var x = 0;
     if (isSorted) {
-      _.each(array, function () {
-        itArr.push(iterator(array[x]));
-        x++
+      _.each(array, function (item) {
+        itArr.push(iterator(item));
       });
-      var y = 0;
-      _.each(itArr, function() {
-        if (!testArr.includes(itArr[y])) {
-          testArr.push(itArr[y]);
-          newArr.push(array[y]);
+      _.each(itArr, function(item, index) {
+        if (!testArr.includes(item)) {
+          testArr.push(item);
+          newArr.push(array[index]);
         }
-        y++
       });
       return newArr
 
     } else {
-      _.each(array, function () {
-        if (!newArr.includes(array[x])) {
-          newArr.push(array[x]);
+      _.each(array, function (item) {
+        if (!newArr.includes(item)) {
+          newArr.push(item);
         }
-        x++;
       });
       return newArr
     }
@@ -148,6 +140,12 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var newArr = [];
+
+    _.each(collection, function(item){
+      newArr.push(iterator(item));
+    });
+    return newArr;
   };
 
   /*
@@ -189,6 +187,26 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    if (accumulator === undefined) {
+      accumulator = collection[0];
+      for (var i = 1; i < collection.length; i++) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+      // _.each(collection, function(memo, item) {
+      //   accumulator += iterator(memo, item);
+      // })
+      return accumulator
+    } else {
+      for (var i = 0; i < collection.length; i++) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+      // _.each(collection, function(memo, item) {
+      //   accumulator += iterator(memo, item);
+      // })
+      return accumulator
+    }
+
+
   };
 
   // Determine if the array or object contains a given value (using `===`).
