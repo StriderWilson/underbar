@@ -122,7 +122,7 @@
           newArr.push(array[index]);
         }
       });
-      return newArr
+      return newArr;
 
     } else {
       _.each(array, function (item) {
@@ -130,7 +130,7 @@
           newArr.push(item);
         }
       });
-      return newArr
+      return newArr;
     }
   };
 
@@ -189,21 +189,22 @@
   _.reduce = function(collection, iterator, accumulator) {
     if (accumulator === undefined) {
       accumulator = collection[0];
-      for (var i = 1; i < collection.length; i++) {
-        accumulator = iterator(accumulator, collection[i]);
-      }
-      // _.each(collection, function(memo, item) {
-      //   accumulator += iterator(memo, item);
-      // })
-      return accumulator
+      // for (var i = 1; i < collection.length; i++) {
+      //   accumulator = iterator(accumulator, collection[i]);
+      // }
+      var newCollection = collection.slice(1, collection.length)
+      _.each(newCollection, function(memo, item) {
+        accumulator = iterator(accumulator, memo);
+      })
+      return accumulator;
     } else {
-      for (var i = 0; i < collection.length; i++) {
-        accumulator = iterator(accumulator, collection[i]);
-      }
-      // _.each(collection, function(memo, item) {
-      //   accumulator += iterator(memo, item);
-      // })
-      return accumulator
+      // for (var i = 0; i < collection.length; i++) {
+      //   accumulator = iterator(accumulator, collection[i]);
+      // }
+      _.each(collection, function(memo, item) {
+        accumulator = iterator(accumulator, memo);
+      })
+      return accumulator;
     }
 
 
