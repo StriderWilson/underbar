@@ -226,7 +226,36 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-  };
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+    return _.reduce(collection, function(accumulator, item) {
+      if (iterator(item) && accumulator) {
+        return true;
+      } else {
+        return false;
+      }
+    }, true);
+  //   var test = true;
+  //   if (iterator === undefined) {
+  //     for (var i = 0; i < collection.length; i++) {
+  //       if (collection[i] === true || collection[i] === 1) {
+  //         test = true
+  //       } else if (collection[i] !== true || collection[i] === 0) {
+  //         return false;
+  //       }
+  //     }
+  //     return test;
+  //   }
+  //   for (var i = 0; i < collection.length; i++) {
+  //     if (iterator(collection[i]) === true || iterator(collection[i]) === 1 || JSON.stringify(iterator(collection[i])) === JSON.stringify({})) {
+  //       test = true;
+  //     } else if (iterator(collection[i]) !== true || iterator(collection[i]) === 0) {
+  //       return false;
+  //     }
+  //   }
+  //   return test;
+};
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
