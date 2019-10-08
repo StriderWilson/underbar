@@ -253,19 +253,25 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    if (iterator === undefined) {
-      iterator = _.identity;
-    }
-    var test = false;
-    for (var i = 0; i < collection.length; i++) {
-      if (iterator(collection[i])) {
-        return true;
-      } else if (!iterator(collection[i])) {
-        test = false;
+    return _.every(collection, function(isTrue, item) {
+      if (iterator(item)) {
+        isTrue = true;
       }
-    }
-    return test;
-  };
+    });
+
+    //   if (iterator === undefined) {
+  //     iterator = _.identity;
+  //   }
+  //   var test = false;
+  //   for (var i = 0; i < collection.length; i++) {
+  //     if (iterator(collection[i])) {
+  //       return true;
+  //     } else if (!iterator(collection[i])) {
+  //       test = false;
+  //     }
+  //   }
+  //   return test;
+};
 
 
   /**
@@ -355,7 +361,6 @@
 
     return (...args) => {
       var key = JSON.stringify(args);
-      console.log(key)
       if (val.hasOwnProperty(key)) {
         return val[key];
       }
@@ -402,6 +407,15 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var copy = array.slice();
+    var newArr = [];
+    var randomInd;
+    for (var i = array.length - 1; i >= 0; i--) {
+      randomInd = Math.floor(Math.random() * i);
+      newArr[i] = copy[randomInd];
+      copy.splice(randomInd, 1);
+    }
+    return newArr;
   };
 
 
