@@ -226,35 +226,27 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-    if (iterator === undefined) {
-      iterator = _.identity;
-    }
-    return _.reduce(collection, function(accumulator, item) {
-      if (iterator(item) && accumulator) {
-        return true;
-      } else {
-        return false;
+    iterator = iterator || _.identity;
+
+    return _.reduce(collection, function(isTrue, item) {
+      if (isTrue && !iterator(item)) {
+        isTrue = false;
+        return isTrue;
       }
+      return isTrue;
     }, true);
-  //   var test = true;
-  //   if (iterator === undefined) {
-  //     for (var i = 0; i < collection.length; i++) {
-  //       if (collection[i] === true || collection[i] === 1) {
-  //         test = true
-  //       } else if (collection[i] !== true || collection[i] === 0) {
-  //         return false;
-  //       }
-  //     }
-  //     return test;
-  //   }
-  //   for (var i = 0; i < collection.length; i++) {
-  //     if (iterator(collection[i]) === true || iterator(collection[i]) === 1 || JSON.stringify(iterator(collection[i])) === JSON.stringify({})) {
-  //       test = true;
-  //     } else if (iterator(collection[i]) !== true || iterator(collection[i]) === 0) {
-  //       return false;
-  //     }
-  //   }
-  //   return test;
+    // var test = true;
+    // if (iterator === undefined) {
+    //   iterator = _.identity;
+    // }
+    // for (var i = 0; i < collection.length; i++) {
+    //   if (iterator(collection[i]) === true || iterator(collection[i]) === 1 || JSON.stringify(iterator(collection[i])) === JSON.stringify({})) {
+    //     test = true;
+    //   } else if (iterator(collection[i]) !== true || iterator(collection[i]) === 0) {
+    //     return false;
+    //   }
+    // }
+    // return test;
 };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -359,6 +351,27 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var val = {};
+
+    return (...args) => {
+      var key = JSON.stringify(args);
+      console.log(key)
+      if (val.hasOwnProperty(key)) {
+        return val[key];
+      }
+
+      val[key] = func.apply(null, args);
+      return val[key];
+    }
+    // var alreadyCalled = false;
+    // var result;
+
+    // if (!alreadyCalled) {
+    //    result = func.apply(this, arguments);
+
+    //   alreadyCalled = true;
+    // };
+    // return result;
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -368,6 +381,13 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var myParameters = [];
+    for (var h = 2; h < arguments.length; h++) {
+      myParameters.push(arguments[h]);
+    }
+    var fun = function() { func.apply(null, myParameters) };
+
+    setTimeout(fun, wait);
   };
 
 
